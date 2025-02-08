@@ -1,0 +1,35 @@
+version: "3"
+name: sonarqube-https-example
+services:
+  sonarqube:
+    image: sonarqube:community
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    hostname: sonarqube
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+
+  proxy:
+    build: ./proxy/
+    image: proxy:latest
+    hostname: nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    # Expose the Docker socket to the proxy container
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  
+  ssl-poke:
+    build: ./ssl-poke/
+    image: ssl-poke:latest
+    container_name: ssl-poke
+    hostname: ssl-poke
+
+volumes:
+  sonarqube_data: {}
+  sonarqube_extensions: {}
+  sonarqube_logs: {}

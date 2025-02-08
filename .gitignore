@@ -1,0 +1,7 @@
+# ignore certs and intermediate
+*.pem
+*.csr
+*.srl
+*.crt
+*.key
+*.cer
